@@ -51,8 +51,7 @@ BEGIN
     WHERE S.labId = labId AND S.consId = consId;
 END //
 DELIMITER ;
--- Task 7 | Run the following stages separately and keep the Python output.
--- First capture the baseline, using the original view and a known stock state.
+-- Task 7 
 -- 7a. Rename the column, then run the unchanged program to observe the view error.
 ALTER TABLE Consumable RENAME COLUMN name TO designation;
 -- 7b. Preserve the view's public columns. Run Python again before continuing.

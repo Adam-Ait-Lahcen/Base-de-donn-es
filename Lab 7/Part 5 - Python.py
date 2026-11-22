@@ -29,7 +29,7 @@ def test_restock(lab_id, cons_id, qty):
 # --- DEMONSTRATIONS ---
 def test():
     # 1. Successful CALL (Replace 1, 101 with a valid pair from your Stocks table)
-    test_restock(lab_id=1, cons_id=4, qty=25)
+    test_restock(lab_id=1, cons_id=1, qty=25)
 
     # 2. Rejection 1: Non-positive quantity
     test_restock(lab_id=1, cons_id=101, qty=-5)
@@ -87,7 +87,7 @@ def test_equipment_reservation(
             "Trigger testing",
             status,
             8,
-            "P-THR-02",
+            "P1",
             3 if status == "Approved" else None
         ))
 
@@ -106,69 +106,25 @@ def test_equipment_reservation(
         print(f"REJECTED by Database: {err.msg}\n")
 
 
-# ---------------- DEMONSTRATIONS ----------------
 
-def test1():
-
-    # 1. Full overlap: 12:00 - 18:00
-    test_equipment_reservation(
-        9, "Approved",
-        "2026-11-03 12:00:00",
-        "2026-11-03 18:00:00",
-        "FLK-1524-002"
-    )
-
-    # 2. Partial overlap: 15:00 - 19:00
-    test_equipment_reservation(
-        10, "Approved",
-        "2026-11-03 15:00:00",
-        "2026-11-03 19:00:00",
-        "FLK-1524-002"
-    )
-
-    # 3. Exact same interval
-    test_equipment_reservation(
-        11, "Approved",
-        "2026-11-03 10:00:00",
-        "2026-11-03 16:00:00",
-        "FLK-1524-002"
-    )
-
-    # 4. Adjacent interval: starts exactly when previous ends
-    test_equipment_reservation(
-        12, "Approved",
-        "2026-11-03 16:00:00",
-        "2026-11-03 18:00:00",
-        "FLK-1524-002"
-    )
-
-    # 5. Different equipment
-    test_equipment_reservation(
-        13, "Approved",
-        "2026-11-03 12:00:00",
-        "2026-11-03 18:00:00",
-        "OLY-BX53-001"
-    )
-
-    # 6. Different date
-    test_equipment_reservation(
-        14, "Approved",
-        "2026-11-04 10:00:00",
-        "2026-11-04 12:00:00",
-        "FLK-1524-002"
-    )
-
-    # 7. Pending reservation with overlapping equipment
-    test_equipment_reservation(
-        15, "Pending",
-        "2026-11-03 12:00:00",
-        "2026-11-03 18:00:00",
-        "FLK-1524-002"
-    )
 test()
-getInServiceEquipmentUnits("Chemistry Laboratory")
+getInServiceEquipmentUnits("Physics Laboratory")
 getLowStocks()
-test1()
+# Task 6: person 8 holds C1, but unit U3 requires both C1 and C2.
+# Reservation ID 16 must be free before running this test.
+test_equipment_reservation(
+    16, "Pending",
+    "2026-11-04 10:00:00",
+    "2026-11-04 12:00:00",
+    "U3",
+)
+
+cursor.close()
+connection.close()
+
+
+
+
 #question7
 #a/ The program shows an error, because the view LaboratoryStockSummary uses the old column name
 #b/ the SQL statement used: we replace the view with one with the same definition but uses the new name
